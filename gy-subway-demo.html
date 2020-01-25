@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<div id="tipView"
+		style="position: absolute;left: -500px;top:-500px;padding: 10px;padding-top: 50px;padding-bottom: 50px; display: inline-block;white-space: nowrap;background-color:rgba(188,188,188,.6);">
+		<input type="button" value="设为起点" style="font-size: 30px;" onclick="clickStartSite()"></input>
+		<input type="button" value="设为终点" style="font-size: 30px;" onclick="clickEndSite()"></input>
+	</div>
+	<!-- built files will be auto injected -->
+	<script>
+		eruda.init();
+	</script>
+</head>
+
+<body>
+	<!-- transform: scale(1); -->
+	<div id="wrapper"
+		style="position: absolute;width: 100%;height: 100%;left: 0px;top: 0px;right: 0px; bottom: 0px; margin: auto">
+	</div>
+
+	<input type="button" value="切换线路" style="position: fixed;font-size: 30px;left :20px;bottom: 20px;"
+		onclick="clickChangeSubway()"></input>
+	<input type="button" value="显示全部" style="position: fixed;font-size: 30px;right :20px;bottom: 20px;"
+		onclick="clickAllSubway()"></input>
+
+</body>
+
+<script src="sdk/gy-subway-sdk.js"></script>
+<script type="text/javascript">
+	var subwayDataList;
+	var selectedSiteObj;
+	//北京 1100 上海 3100 广州 4401 深圳 4403 香港 8100 杭州 3301 成都 5101 西安 6101
+	var adcode = getWindowParams("code");
+	var map = new GYSubwayMap("wrapper", "tipView", { adcode: adcode, focusMiddleSite: true });
+	map.onEvent("siteSelected", function (siteObj) {//站点选中
+		selectedSiteObj = siteObj;
+	});
+	map.onEvent("loaded", function (dataList) {
+		// console.log("获取到所有线路数据dataList:" + dataList.length);
+		subwayDataList = dataList;
+		for (var i = dataList.length - 1; i >= 0; i--) {
+			var metroName = dataList[i].metroName;
+			var metroBranch = dataList[i].metroBranch;
+			console.log("获取到线路名		: 	" + metroName + (metroBranch ? "	分支		:" + metroBranch : ""));
+		}
+	});
+	map.onEvent("routerStart", function (startSite, endSite) {//站点选中
+		console.log("开始寻路:" + startSite.n + " -> " + endSite.n);
+		//显示加载中
+	});
+	map.onEvent("routerSuccess", function (startSite, endSite) {//站点选中
+		console.log("寻路成功:" + startSite.n + " -> " + endSite.n);
+		//隐藏加载中
+	});
+	map.onEvent("routerFail", function () {//站点选中
+		alert("寻路失败");
+		//隐藏加载中
+	});
+	var index = 0;
+	function clickChangeSubway() {//切换线路
+		console.log("clickChangeSubway");
+		if (subwayDataList && index < subwayDataList.length) {
+			map.showSubwayLine(subwayDataList[index].id);
+			index = index + 1 >= subwayDataList.length ? 0 : index + 1;
+		}
+	}
+	function clickAllSubway() {
+		map.showSubwayLine(null);//显示全部
+	}
+	function clickStartSite() {
+		if (selectedSiteObj) {
+			map.setStartSite(selectedSiteObj);
+		}
+	}
+	function clickEndSite() {
+		if (selectedSiteObj) {
+			map.setEndSite(selectedSiteObj);
+		}
+	}
+
+	function getWindowParams(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null) return unescape(r[2]); return null;
+	}
+
+</script>
+
+</html>
