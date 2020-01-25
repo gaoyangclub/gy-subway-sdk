@@ -1,3 +1,5 @@
+仿高德地图 JS SDK
+![image.png](https://upload-images.jianshu.io/upload_images/11449836-82140090b2b6749b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 # 接入方式
 ```javascript
 <script src="sdk/gy-subway-sdk.js"></script>
