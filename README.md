@@ -1,6 +1,7 @@
 高德地铁线路图比百度地铁线路图精致很多，故仿照高德地铁线路图绘制
 此demo仅供学习使用，请勿商用，如非法使用后果自负
 ![image.png](https://upload-images.jianshu.io/upload_images/11449836-82140090b2b6749b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 # 接入方式
 ```javascript
 <script src="sdk/gy-subway-sdk.js"></script>
